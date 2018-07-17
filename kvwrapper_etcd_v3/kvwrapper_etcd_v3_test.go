@@ -21,6 +21,11 @@ func TestGetSingle(t *testing.T) {
 		"", // cfg.KVUsername,
 		"", // cfg.KVPassword,
 	)
+	if kvw == nil {
+		log.Warn("GetSingle failed for to get a valid etcd v3 client")
+		t.Error("Failed to create a v3 KVWrapper")
+		return
+	}
 
 	set_err := kvw.Set("Foo", "Bar", 30)
 	if set_err != nil {
@@ -67,7 +72,17 @@ func TestGetMultiple(t *testing.T) {
 		t.Skip("skipping test; $KV_ETCD_LOCALHOST not set")
 	}
 	hosts := []string{"http://localhost:2379"}
-	kvw := EtcdV3Wrapper.NewKVWrapper(EtcdV3Wrapper{}, hosts, "", "")
+	kvw := kvwrapper.NewKVWrapperWithAuth(
+		hosts,
+		EtcdV3Wrapper{},
+		"", // cfg.KVUsername,
+		"", // cfg.KVPassword,
+	)
+	if kvw == nil {
+		log.Warn("GetMultiple failed for to get a valid etcd v3 client")
+		t.Error("Failed to create a v3 KVWrapper")
+		return
+	}
 
 	set_err := kvw.Set("Foo/1", "Bar/1", 30)
 	if set_err != nil {
@@ -106,7 +121,17 @@ func TestDelSingle(t *testing.T) {
 		t.Skip("skipping test; $KV_ETCD_LOCALHOST not set")
 	}
 	hosts := []string{"http://localhost:2379"}
-	kvw := EtcdV3Wrapper.NewKVWrapper(EtcdV3Wrapper{}, hosts, "", "")
+	kvw := kvwrapper.NewKVWrapperWithAuth(
+		hosts,
+		EtcdV3Wrapper{},
+		"", // cfg.KVUsername,
+		"", // cfg.KVPassword,
+	)
+	if kvw == nil {
+		log.Warn("DelSingle failed for to get a valid etcd v3 client")
+		t.Error("Failed to create a v3 KVWrapper")
+		return
+	}
 
 	kv_pairs, get_err := kvw.GetList("", false)
 	num_entries := 0
@@ -146,7 +171,17 @@ func TestDelMultiple(t *testing.T) {
 		t.Skip("skipping test; $KV_ETCD_LOCALHOST not set")
 	}
 	hosts := []string{"http://localhost:2379"}
-	kvw := EtcdV3Wrapper.NewKVWrapper(EtcdV3Wrapper{}, hosts, "", "")
+	kvw := kvwrapper.NewKVWrapperWithAuth(
+		hosts,
+		EtcdV3Wrapper{},
+		"", // cfg.KVUsername,
+		"", // cfg.KVPassword,
+	)
+	if kvw == nil {
+		log.Warn("DelMultiple failed for to get a valid etcd v3 client")
+		t.Error("Failed to create a v3 KVWrapper")
+		return
+	}
 
 	kv_pairs, get_err := kvw.GetList("", false)
 	var num_entries int64
